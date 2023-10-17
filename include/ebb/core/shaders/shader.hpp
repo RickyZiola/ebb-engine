@@ -20,6 +20,9 @@ public:
 
     void load_vertex_source(const char *source);
     void load_fragment_source(const char *source);
+    void link();
+
+    void use();
 
 private:
     unsigned int vShader;
