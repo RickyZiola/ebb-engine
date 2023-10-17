@@ -72,6 +72,39 @@ void Ebb::Core::ShaderProgram::link() {
     }
 }
 
+void Ebb::Core::ShaderProgram::set_bool(const char *name, bool value) {
+    this->set_int(name, (int)value);
+}
+void Ebb::Core::ShaderProgram::set_int(const char *name, int value) {
+    glUniform1i(glGetUniformLocation(this->sProgram, name), value);
+}
+void Ebb::Core::ShaderProgram::set_float(const char *name, float value) {
+    glUniform1f(glGetUniformLocation(this->sProgram, name), value);
+}
+
+void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0) {
+    set_float(name, v0);
+}
+void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0, float v1) {
+    glUniform2f(glGetUniformLocation(this->sProgram, name), v0, v1);
+}
+void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0, float v1, float v2) {
+    glUniform3f(glGetUniformLocation(this->sProgram, name), v0, v1, v2);
+}
+void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0, float v1, float v2, float v3) {
+    glUniform4f(glGetUniformLocation(this->sProgram, name), v0, v1, v2, v3);
+}
+
+void Ebb::Core::ShaderProgram::set_float2(const char *name, float2 value) {
+    set_floats(name, value.x, value.y);
+}
+void Ebb::Core::ShaderProgram::set_float3(const char *name, float3 value) {
+    set_floats(name, value.x, value.y, value.z);
+}
+void Ebb::Core::ShaderProgram::set_float4(const char *name, float4 value) {
+    set_floats(name, value.x, value.y, value.z, value.w);
+}
+
 void Ebb::Core::ShaderProgram::use() {
     glUseProgram(this->sProgram);
 }

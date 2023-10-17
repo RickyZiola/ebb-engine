@@ -1,10 +1,13 @@
 #include <ebb/core/window/window.hpp>
 #include <ebb/core/shaders/shader.hpp>
+#include <ebb/math/vector.hpp>
 #include <stdio.h>
 #include <assert.h>
 #include <chrono>
+#include <math.h>
 
 using Ebb::Core::Window;
+using namespace Ebb::Math;
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -16,12 +19,15 @@ const char *vertexShaderSource = "#version 330 core\n"
 const char *fragmentShaderSource = R"(
 #version 330 core
 out vec4 FragColor;
+uniform vec3 color;
 
 void main()
 {
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    FragColor = vec4(color, 1.0f);
 } 
 )";
+
+Ebb::Core::ShaderProgram *shader;
 
 std::chrono::_V2::system_clock::time_point start_time;
 unsigned long frames = 0;
@@ -32,6 +38,9 @@ float elapsed_seconds() {
 }
 
 void frame_callback() {
+    float3 color = float3((std::sin(elapsed_seconds()) + 1.) / 2., (std::sin(elapsed_seconds() * 1.5) + 1.) / 2., (std::sin(elapsed_seconds() * 2.0) + 1.) / 2.);
+    shader->set_float3("color", color);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     printf("FPS: %f                  \r", (float)frames++ / elapsed_seconds());
@@ -56,10 +65,10 @@ int main(int argc, char *argv[]) {
 
     
 
-    Ebb::Core::ShaderProgram shader = Ebb::Core::ShaderProgram();
-    shader.load_vertex_source(vertexShaderSource);
-    shader.load_fragment_source(fragmentShaderSource);
-    shader.link();
+    shader = new Ebb::Core::ShaderProgram();
+    shader->load_vertex_source(vertexShaderSource);
+    shader->load_fragment_source(fragmentShaderSource);
+    shader->link();
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -79,7 +88,7 @@ int main(int argc, char *argv[]) {
     glEnableVertexAttribArray(0); 
     glBindVertexArray(VAO);
 
-    shader.use();
+    shader->use();
 
     start_time = std::chrono::high_resolution_clock::now();
     win.run(480);
