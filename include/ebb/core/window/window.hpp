@@ -45,6 +45,15 @@ public:
     Window(int width, int height, const std::string& title, RenderLoopCallback callback);
 
     /**
+     * @brief Creates a new Window in fulscreen with the given title.
+    */
+    Window(const char *title);
+    Window(const std::string& title);
+
+    Window(const char *title,        RenderLoopCallback callback);
+    Window(const std::string& title, RenderLoopCallback callback);
+
+    /**
      * This is used internally, do not call it.
     */
     void _window_resize_callback(GLFWwindow* window, int width, int height);
@@ -74,14 +83,19 @@ public:
    void set_render_loop_callback(RenderLoopCallback callback) { render_loop_callback = callback; }
 
     /**
-        * @brief Run the window's render loop.
+     * @brief Run the window's render loop.
     */
-    void run(unsigned long frames=-1);
+    void run(unsigned long long frames=-1);
 
     /**
      * @brief Run a single frame of the window's render loop.
     */
     void step();
+
+    /**
+     * @brief Make the window's context the active OpenGL context
+    */
+    void make_active();
 
 private:
     int width, height;

@@ -13,6 +13,7 @@ const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "layout (location = 1) in vec3 texCoord;\n"
     "out vec3 uvCoord;\n"
+    "uniform vec3 color;\n"
     "void main()\n"
     "{\n"
     "   uvCoord = texCoord.xyz;"
@@ -32,6 +33,7 @@ void main()
 )";
 
 Ebb::Core::ShaderProgram *shader;
+Ebb::Core::Window *window;
 unsigned int VAO, VBO;
 
 std::chrono::_V2::system_clock::time_point start_time;
@@ -44,6 +46,9 @@ float elapsed_seconds() {
 }
 
 void frame_callback() {
+    if(glfwGetKey(window->get_window(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(window->get_window(), true);
+
     float vertices[] = {
         // positions         // UV coordinates (TODO: remove the blue/Z channel, mesh loading)
         0.5f  * std::cos(elapsed_seconds()), -0.5f, .5f * std::sin(elapsed_seconds()),   1.0f, 0.0f, 1.0f,   // bottom right
@@ -53,8 +58,7 @@ void frame_callback() {
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -67,7 +71,7 @@ void frame_callback() {
     glBindVertexArray(VAO);
     
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -82,14 +86,15 @@ void frame_callback() {
     glClearColor(.5f, .8f, .9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    printf("FPS: %f                  \r", (float)frames++ / elapsed_seconds());
+    printf("FPS: %.01f                  \r", (float)frames++ / elapsed_seconds());
     fflush(stdout);
 }
 //
 int main(int argc, char *argv[]) {
     Ebb::Core::Internal::init_glfw();
 
-    Window win = Window(800,600, "Ebb::Core::ShaderProgram test", &frame_callback);
+    Window win = Window("Ebb::Core::ShaderProgram test", &frame_callback);
+    window = &win;
 
     shader = new Ebb::Core::ShaderProgram();
     shader->load_vertex_source(vertexShaderSource);
@@ -102,5 +107,6 @@ int main(int argc, char *argv[]) {
     win.run(960);
     
     Ebb::Core::Internal::terminate_glfw();
+    printf("\n\n");
     return 0;
 }
