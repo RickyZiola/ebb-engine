@@ -64,7 +64,7 @@ void Ebb::Core::ShaderProgram::link() {
     glLinkProgram(this->sProgram);
 
     int success;
-    glGetProgramiv(this->sProgram, GL_LINK_STATUS, &success);
+    glGetShaderiv(this->sProgram, GL_LINK_STATUS, &success);
     if (!success) {
         char infoLog[512];
         glGetProgramInfoLog(this->sProgram, 512, NULL, infoLog);
