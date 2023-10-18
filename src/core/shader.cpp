@@ -1,5 +1,6 @@
 #include <ebb/core/shaders/shader.hpp>
 #include <stdio.h>
+#include <GL/glu.h>
 
 /**
  * TODO: Preproccessing, custom shading language (?)
@@ -64,7 +65,7 @@ void Ebb::Core::ShaderProgram::link() {
     glLinkProgram(this->sProgram);
 
     int success;
-    glGetShaderiv(this->sProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(this->sProgram, GL_LINK_STATUS, &success);
     if (!success) {
         char infoLog[512];
         glGetProgramInfoLog(this->sProgram, 512, NULL, infoLog);
@@ -76,9 +77,11 @@ void Ebb::Core::ShaderProgram::set_bool(const char *name, bool value) {
     this->set_int(name, (int)value);
 }
 void Ebb::Core::ShaderProgram::set_int(const char *name, int value) {
+    this->use();
     glUniform1i(glGetUniformLocation(this->sProgram, name), value);
 }
 void Ebb::Core::ShaderProgram::set_float(const char *name, float value) {
+    this->use();
     glUniform1f(glGetUniformLocation(this->sProgram, name), value);
 }
 
@@ -86,12 +89,16 @@ void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0) {
     set_float(name, v0);
 }
 void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0, float v1) {
+    this->use();
     glUniform2f(glGetUniformLocation(this->sProgram, name), v0, v1);
 }
 void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0, float v1, float v2) {
+    this->use();
     glUniform3f(glGetUniformLocation(this->sProgram, name), v0, v1, v2);
+
 }
 void Ebb::Core::ShaderProgram::set_floats(const char *name, float v0, float v1, float v2, float v3) {
+    this->use();
     glUniform4f(glGetUniformLocation(this->sProgram, name), v0, v1, v2, v3);
 }
 

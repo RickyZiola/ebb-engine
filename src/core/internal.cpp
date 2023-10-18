@@ -1,5 +1,7 @@
 #include <ebb/core/window/window.hpp>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static bool _glfwInitialized = false;
 

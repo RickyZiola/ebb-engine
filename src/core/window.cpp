@@ -19,6 +19,7 @@ Ebb::Core::Window::Window(int width, int height, const char *title) {
         perror("Failed to create GLFW window.\n");
         exit(-1);
     }
+
     glfwSetWindowUserPointer(this->window, this);
     glfwMakeContextCurrent(this->window);
 
@@ -26,7 +27,7 @@ Ebb::Core::Window::Window(int width, int height, const char *title) {
         perror("Failed to initialize GLAD.\n");
         exit(-1);
     }
-
+    
     glViewport(0, 0, width, height);
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 
@@ -58,6 +59,7 @@ Ebb::Core::Window::Window(const char *title) {
         perror("Failed to create GLFW window.\n");
         exit(-1);
     }
+
     glfwSetWindowUserPointer(this->window, this);
     glfwMakeContextCurrent(this->window);
 
