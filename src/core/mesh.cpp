@@ -18,13 +18,6 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
                       Ebb::Core::ShaderProgram *shader) {
     this->shader = shader;
 
-
-    GLenum error;
-    while ((error = glGetError()) != GL_NO_ERROR) {
-        // Handle the error here, e.g., print an error message or log it.
-        fprintf(stderr, "OpenGL Error before mesh setup: %s\n", gluErrorString(error));
-    }
-
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -67,24 +60,12 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
 
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    while ((error = glGetError()) != GL_NO_ERROR) {
-        // Handle the error here, e.g., print an error message or log it.
-        fprintf(stderr, "OpenGL Error in mesh setup: %s\n", gluErrorString(error));
-    }
 }
 
 Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
                       unsigned int triCount, unsigned int edgeTable[],
                       float2 texCoords[], Ebb::Core::ShaderProgram *shader) {
     this->shader = shader;
-
-
-    GLenum error;
-    while ((error = glGetError()) != GL_NO_ERROR) {
-        // Handle the error here, e.g., print an error message or log it.
-        fprintf(stderr, "OpenGL Error before mesh setup: %s\n", gluErrorString(error));
-    }
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -124,11 +105,6 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
 
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    while ((error = glGetError()) != GL_NO_ERROR) {
-        // Handle the error here, e.g., print an error message or log it.
-        fprintf(stderr, "OpenGL Error in mesh setup: %s\n", gluErrorString(error));
-    }
 }
 
 void Ebb::Core::Mesh::draw() {

@@ -14,11 +14,13 @@ using namespace Ebb::Math;
 const char *vertexShaderSource = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 texCoord;
+layout (location = 1) in vec2 texCoord;
 
 uniform float aspect;
 
+out vec2 uv;
 void main() {
+    uv = texCoord;
     gl_Position = vec4(aPos.x, aPos.yz, 1.0);
 }
 )";
@@ -28,9 +30,10 @@ const char *fragmentShaderSource = R"(
 out vec4 FragColor;
 uniform vec3 color;
 
+in vec2 uv;
 void main()
 {
-    FragColor = vec4(color, 1.0);
+    FragColor = vec4(color * vec3(uv, 1.0), 1.0);
 } 
 )";
 
@@ -58,6 +61,13 @@ void frame_callback() {
         float3( .5, -.5, 0.0), // bottom right
         float3( .5,  .5, 0.0), // top right
     };
+
+    float2 texCoords[] = {
+        float2(0, 0), // Bottom left
+        float2(0, 1), // Top left
+        float2(1, 0), // Bottom right
+        float2(1, 1), // Top right
+    };
     
     unsigned int edgeTable[] = {
         0, 1, 2,
@@ -66,7 +76,8 @@ void frame_callback() {
 
     Ebb::Core::Mesh mesh = Ebb::Core::Mesh(
         4, vertices,
-        2, edgeTable, shader);
+        2, edgeTable,
+        texCoords, shader);
 
     float3 color = float3((std::sin(elapsed_seconds()) + 1.) / 2., (std::sin(elapsed_seconds() * 1.5) + 1.) / 2., (std::sin(elapsed_seconds() * 2.0) + 1.) / 2.);
     shader->set_float3("color", color);
