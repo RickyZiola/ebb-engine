@@ -44,6 +44,16 @@ public:
     T dot (const vec3<T>& v) const { return x*v.x + y*v.y + z*v.z; }
     T length() const { return std::sqrt(x*x + y*y + z*z); }
 
+    vec3<T> normalize() const { return *this / vec3<T>(this->length()); }
+
+    vec3<T> cross(const vec3<T>& v) const {
+        return vec3<T>(
+            y * v.z - z * v.y,
+            z * v.x - x * v.z,
+            x * v.y - y * v.x
+        );
+    }
+
 private:
 
 };

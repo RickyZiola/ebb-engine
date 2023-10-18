@@ -5,12 +5,14 @@
 
 using Ebb::Core::Window;
 
-const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
+const char *vertexShaderSource = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+uniform float aspectRatio;
+
+void main() {
+    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+})";
 
 const char *fragmentShaderSource = R"(
 #version 330 core
