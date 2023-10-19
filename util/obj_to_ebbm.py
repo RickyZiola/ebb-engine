@@ -39,13 +39,8 @@ def obj_to_ebbm(in_fname: str, out_fname: str=None):
                     vert_indices.append(int(vert_idx) -1)
                     tex_indices.append(int(tex_idx)   -1)
                     norm_indices.append(int(norm_idx) -1)
-    obj_out=""
     i = 0
-    # TODO: figure out normals and texcoords.
     while i < len(vert_indices):
-        obj_out += f"v {' '.join([str(v) for v in vertices[vert_indices[i]]])}\n"
-        obj_out += f"vn {' '.join([str(v) for v in normals[norm_indices[i]]])}\n"
-        obj_out += f"vt {' '.join([str(v) for v in texcoords[tex_indices[i]]])}\n"
         final_vtable.append(
             b'v' + struct.pack('fff', *vertices[vert_indices[i]]) + struct.pack('ff', *texcoords[tex_indices[i]]) + struct.pack('fff', *normals[norm_indices[i]])
         )
@@ -53,7 +48,6 @@ def obj_to_ebbm(in_fname: str, out_fname: str=None):
 
     i = 0
     while i < len(vert_indices):
-        obj_out += f"f {i+1}/{i+1}/{i+1} {i+2}/{i+2}/{i+2} {i+3}/{i+3}/{i+3}\n"
         final_ftable.append(
             b'f' + struct.pack('III',
                 i+0,
@@ -68,7 +62,6 @@ def obj_to_ebbm(in_fname: str, out_fname: str=None):
         for face in final_ftable:
             f.write(face)
 
-    open("test.obj", 'w').write(obj_out)
 if __name__ == "__main__":
     if len(argv) < 2:
         print(f"Usage: {argv[0]} <filename>")

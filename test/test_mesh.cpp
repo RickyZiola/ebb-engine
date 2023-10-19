@@ -21,7 +21,7 @@ uniform float aspect;
 uniform float time;
 
 out vec2 uv;
-out vec3 normal;
+smooth out vec3 normal;
 out vec3 pos;
 void main() {
     uv = texCoord;
@@ -38,7 +38,7 @@ uniform vec3 color;
 uniform float time;
 
 in vec2 uv;
-in vec3 normal;
+smooth in vec3 normal;
 in vec3 pos;
 
 void main() {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 
     shader->set_float("aspect", (float)win.get_width() / (float)win.get_height());
 
-    mesh = Ebb::Core::Mesh::load_ebb_mesh("suzanne.ebbm", shader);
+    mesh = Ebb::Core::Mesh::load_ebb_mesh("models/suzanne.ebbm", shader);
 
     start_time = std::chrono::high_resolution_clock::now();
     win.run();
