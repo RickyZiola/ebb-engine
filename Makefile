@@ -36,7 +36,7 @@ LIB_OUTS:=$(patsubst $(SOURCE_DIR)%,$(LIB_DIR)%,$(LIB_OUTS))
 default:
 	@echo "Please make target 'libs' or 'test'"
 	@echo "TODO: more complete makefile"
-	@echo "Current line count: $(shell find ./** -type f \( -name "*.cpp" -o -name "*.hpp" \) -exec cat {} \; | wc -l)"
+	@echo "Current line count: $(shell find ./** -not -path "./include/ebb/external/*" -type f \( -name "*.cpp" -o -name "*.hpp" \) -exec cat {} \; | wc -l)"
 
 test: libs $(TEST_OUTS)
 

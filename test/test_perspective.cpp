@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     Window win = Window("Perspective camera test", &frame_callback);
     window = &win;
     
-    shader = new Ebb::Core::TextureShader("textures/companion-cube.png");
+    shader = new Ebb::Core::TextureShader("textures/crate.jpg");
 
     aspect = (float)win.get_width() / (float)win.get_height();
 
