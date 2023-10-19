@@ -11,6 +11,12 @@ static void _window_size_callback(GLFWwindow *window, int width, int height) {
 }
 
 Ebb::Core::Window::Window(int width, int height, const char *title) {
+    int maxDimension = std::max(width, height);
+    int minDimension = std::min(width, height);
+
+    int diff = maxDimension - minDimension;
+    int off = diff / 2;
+        
     this->width = width;
     this->height = height;
 
@@ -28,7 +34,10 @@ Ebb::Core::Window::Window(int width, int height, const char *title) {
         exit(-1);
     }
     
-    glViewport(0, 0, width, height);
+    if (width == minDimension)
+        glViewport(-off, 0, height, height);
+    else
+        glViewport(0, -off, width, width);
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 
     this->render_loop_callback = nullptr;
@@ -48,9 +57,15 @@ Ebb::Core::Window::Window(const char *title) {
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-    int width   = mode->width;
+    int width = mode->width;
     int height = mode->height;
 
+    int maxDimension = std::max(width, height);
+    int minDimension = std::min(width, height);
+
+    int diff = maxDimension - minDimension;
+    int off = diff / 2;
+        
     this->width = width;
     this->height = height;
 
@@ -68,7 +83,10 @@ Ebb::Core::Window::Window(const char *title) {
         exit(-1);
     }
 
-    glViewport(0, 0, width, height);
+    if (width == minDimension)
+        glViewport(-off, 0, height, height);
+    else
+        glViewport(0, -off, width, width);
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 
     this->render_loop_callback = nullptr;
@@ -84,7 +102,18 @@ Ebb::Core::Window::Window(const char *title, RenderLoopCallback callback) : Wind
 
 void Ebb::Core::Window::_window_resize_callback(GLFWwindow *window, int width, int height) {
     glfwMakeContextCurrent(window);
-    glViewport(0, 0, width, height);
+
+    int maxDimension = std::max(width, height);
+    int minDimension = std::min(width, height);
+
+    int diff = maxDimension - minDimension;
+    int off = diff / 2;
+
+    if (width == minDimension)
+        glViewport(-off, 0, height, height);
+    else
+        glViewport(0, -off, width, width);
+
     this->width = width;
     this->height = height;
 }
