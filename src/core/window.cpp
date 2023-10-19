@@ -38,6 +38,10 @@ Ebb::Core::Window::Window(int width, int height, const char *title) {
         glViewport(-off, 0, height, height);
     else
         glViewport(0, -off, width, width);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 
     this->render_loop_callback = nullptr;
@@ -87,6 +91,10 @@ Ebb::Core::Window::Window(const char *title) {
         glViewport(-off, 0, height, height);
     else
         glViewport(0, -off, width, width);
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 
     this->render_loop_callback = nullptr;

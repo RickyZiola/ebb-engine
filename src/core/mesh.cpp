@@ -207,5 +207,7 @@ Ebb::Core::Mesh *Ebb::Core::Mesh::load_ebb_mesh(const char *filename, ShaderProg
             indices.push_back(v2);
         }
     }
+
+    printf("Loaded %d vertices and %d triangles\n", vertices.size(), indices.size() / 3);
     return new Mesh(vertices.size(), &vertices[0], (indices.size() / 3), &indices[0], &texcoords[0], &normals[0], shader);
 }
