@@ -40,6 +40,9 @@ public:
     void set_float3(const char *name, float3 value);
     void set_float4(const char *name, float4 value);
 
+    void set_float3x3(const char *name, float3x3 value);
+    void set_float4x4(const char *name, float4x4 value);
+
     void use();
 
 private:

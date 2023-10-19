@@ -2,6 +2,7 @@
 #define MATH_HPP
 
 #include <ebb/external/glm/glm.hpp>
+#include <ebb/external/glm/gtc/matrix_transform.hpp>
 
 namespace Ebb {
 namespace Math {

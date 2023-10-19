@@ -112,6 +112,13 @@ void Ebb::Core::ShaderProgram::set_float4(const char *name, float4 value) {
     set_floats(name, value.x, value.y, value.z, value.w);
 }
 
+void Ebb::Core::ShaderProgram::set_float3x3(const char *name, float3x3 value) {
+    glUniformMatrix3fv(glGetUniformLocation(this->sProgram, name), 1, GL_FALSE, &value[0][0]);
+}
+void Ebb::Core::ShaderProgram::set_float4x4(const char *name, float4x4 value) {
+    glUniformMatrix4fv(glGetUniformLocation(this->sProgram, name), 1, GL_FALSE, &value[0][0]);
+}
+
 void Ebb::Core::ShaderProgram::use() {
     glUseProgram(this->sProgram);
 }

@@ -44,6 +44,8 @@ private:
 
     unsigned int numTriangles;
 
+    float4x4 transformMatrix;
+
     Ebb::Core::ShaderProgram *shader;
 };
 
