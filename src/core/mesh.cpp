@@ -33,9 +33,9 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
         |  3 floats  |  |  3 floats  |  | 2 floats |
         |                  8 floats                |
     */
-    float meshInfo[vertexCount * 8];
+    float *meshInfo = (float *)malloc(vertexCount * 8 * sizeof(float));
 
-    for (int i = 0; i < vertexCount; ++i) {
+    for (unsigned int i = 0; i < vertexCount; ++i) {
         meshInfo[i * 8 + 0] = vertexTable[i].x;
         meshInfo[i * 8 + 1] = vertexTable[i].y;
         meshInfo[i * 8 + 2] = vertexTable[i].z;
@@ -54,7 +54,7 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(meshInfo), meshInfo, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertexCount * 8 * sizeof(float), meshInfo, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, triCount * 3 * sizeof(unsigned int), triTable, GL_STATIC_DRAW);
@@ -91,9 +91,9 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
         |  3 floats  |  |  3 floats  |  | 2 floats |
         |                  8 floats                |
     */
-    float meshInfo[vertexCount * 8];
+    float *meshInfo = (float *)malloc(vertexCount * 8 * sizeof(float));
 
-    for (int i = 0; i < vertexCount; ++i) {
+    for (unsigned int i = 0; i < vertexCount; ++i) {
         meshInfo[i * 8 + 0] = vertexTable[i].x;
         meshInfo[i * 8 + 1] = vertexTable[i].y;
         meshInfo[i * 8 + 2] = vertexTable[i].z;
@@ -112,7 +112,7 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(meshInfo), meshInfo, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertexCount * 8 * sizeof(float), meshInfo, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, triCount * 3 * sizeof(unsigned int), triTable, GL_STATIC_DRAW);
@@ -207,7 +207,7 @@ Ebb::Core::Mesh *Ebb::Core::Mesh::load_ebb_mesh(const char *filename, ShaderProg
             indices.push_back(v2);
         }
     }
+    printf("Loaded %lu triangles\n", indices.size() / 3);
 
-    printf("Loaded %d vertices and %d triangles\n", vertices.size(), indices.size() / 3);
     return new Mesh(vertices.size(), &vertices[0], (indices.size() / 3), &indices[0], &texcoords[0], &normals[0], shader);
 }

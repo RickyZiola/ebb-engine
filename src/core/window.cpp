@@ -42,6 +42,12 @@ Ebb::Core::Window::Window(int width, int height, const char *title) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    if (glfwExtensionSupported("GL_ARB_multisample")) {
+        glEnable(GL_MULTISAMPLE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
+    }
+
+
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 
     this->render_loop_callback = nullptr;
@@ -94,6 +100,11 @@ Ebb::Core::Window::Window(const char *title) {
     
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+
+    if (glfwExtensionSupported("GL_ARB_multisample")) {
+        glEnable(GL_MULTISAMPLE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
+    }
 
     glfwSetWindowSizeCallback(this->window, _window_size_callback);
 

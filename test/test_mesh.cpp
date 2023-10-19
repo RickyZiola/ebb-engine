@@ -44,8 +44,8 @@ in vec3 pos;
 void main() {
     vec3 light = normalize(vec3(1,1,-1));
     vec3 ambient = vec3(.1);
-    vec3 h = normalize(normalize(pos) - light);
-    FragColor = vec4(vec3(clamp(dot(normal, light), 0.0, 1.0)) + pow(max(dot(normal, h), 0.0), 16) * 0.5 + ambient, 1.0);
+    vec3 h = normalize(normalize(pos) + light);
+    FragColor = vec4((vec3(max(dot(normal, light), 0.0)) * .8 * color + pow(max(dot(normal, h), 0.0), 500) * .5 + ambient), 1.0);
 } 
 )";
 
@@ -67,7 +67,7 @@ void frame_callback() {
     if(glfwGetKey(window->get_window(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window->get_window(), true);
 
-    float3 color = float3((std::sin(elapsed_seconds()) + 1.) / 2., (std::sin(elapsed_seconds() * 1.5) + 1.) / 2., (std::sin(elapsed_seconds() * 2.0) + 1.) / 2.);
+    float3 color = float3((std::sin(elapsed_seconds() * 2.) + 1.) / 2., (std::sin(elapsed_seconds() * 3.) + 1.) / 2., (std::sin(elapsed_seconds() * 4.0) + 1.) / 2.);
     shader->set_float3("color", color);
     shader->set_float("time", elapsed_seconds() / 5);
 
