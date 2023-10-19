@@ -1,6 +1,6 @@
 #include <ebb/core/window/window.hpp>
 #include <ebb/core/shaders/shader.hpp>
-#include <ebb/math/vector.hpp>
+#include <ebb/math/math.hpp>
 #include <stdio.h>
 #include <assert.h>
 #include <chrono>
@@ -59,10 +59,10 @@ void frame_callback() {
         0.0f,                                 0.5f, 0.0f,                                0.0f, 1.0f, 1.0f    // top 
     };
 
-    float3 norm12 = (float3(vertices[0], vertices[1], vertices[2]) - float3(vertices[6], vertices[7], vertices[8])).normalize();
-    float3 norm13 = (float3(vertices[0], vertices[1], vertices[2]) - float3(vertices[12], vertices[13], vertices[14])).normalize();
+    float3 norm12 = normalize(float3(vertices[0], vertices[1], vertices[2]) - float3(vertices[6], vertices[7], vertices[8]));
+    float3 norm13 = normalize(float3(vertices[0], vertices[1], vertices[2]) - float3(vertices[12], vertices[13], vertices[14]));
 
-    float3 normal = norm12.cross(norm13);
+    float3 normal = cross(norm12, norm13);
 
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);

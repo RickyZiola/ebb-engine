@@ -1,7 +1,7 @@
 #include <ebb/core/window/window.hpp>
 #include <ebb/core/shaders/shader.hpp>
 #include <ebb/core/geometry/mesh.hpp>
-#include <ebb/math/vector.hpp>
+#include <ebb/math/math.hpp>
 #include <stdio.h>
 #include <assert.h>
 #include <chrono>

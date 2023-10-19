@@ -2,7 +2,7 @@
 #define SHADER_HPP
 
 #include <glad/glad.h>
-#include <ebb/math/vector.hpp>
+#include <ebb/math/math.hpp>
 
 using namespace Ebb::Math;
 

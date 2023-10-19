@@ -1,7 +1,7 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include <ebb/math/vector.hpp>
+#include <ebb/math/math.hpp>
 #include <ebb/core/shaders/shader.hpp>
 
 using namespace Ebb::Math;
