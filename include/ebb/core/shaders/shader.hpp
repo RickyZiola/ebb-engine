@@ -18,6 +18,8 @@ unsigned int compile_fragment(const char *source);
 
 class ShaderProgram {
 public:
+    unsigned int sProgram;
+    
     ShaderProgram();
     ~ShaderProgram();
 
@@ -43,7 +45,6 @@ public:
 private:
     unsigned int vShader;
     unsigned int fShader;
-    unsigned int sProgram;
 };
 
 }; };

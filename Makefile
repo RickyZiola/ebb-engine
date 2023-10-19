@@ -52,11 +52,11 @@ $(TEST_OUTS): $(BIN_DIR)%: $(TEST_DIR)%.cpp
 libs: $(LIB_OUTS)
 	@echo "Archiving libraries"
 	@rm -f $(LIB_DIR)$(LIB_FINAL)
-	@$(CC) -shared -o $(LIB_DIR)$(LIB_FINAL) $(LIB_OUTS)
+	@$(CC) -shared -o $(LIB_DIR)$(LIB_FINAL) $(LIB_OUTS) -fPIC
 	@echo "Created final library file at '$(LIB_DIR)$(LIB_FINAL)'"
 
 $(LIB_OUTS): $(LIB_DIR)%.o: $(SOURCE_DIR)%.cpp
 	@echo "Building library file $<"
 	@mkdir -p $(dir $@)
-	@$(CC) $(CCARGS) $(COMPILE_ARGS) -I$(INCLUDE_PATH) $< -o $@
+	@$(CC) $(CCARGS) $(COMPILE_ARGS) -I$(INCLUDE_PATH) $< -o $@ -fPIC
 	@echo "Built $@"
