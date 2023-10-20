@@ -35,6 +35,12 @@ public:
     */
     void draw();
 
+    /**
+     * Set the transformation matrix of the mesh
+    */
+    void set_transform(float4x4 transform);
+    float4x4 get_transform();
+
     static Mesh *load_ebb_mesh(const char *filename, Ebb::Core::ShaderProgram *shader);
 
 private:

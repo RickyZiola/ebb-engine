@@ -26,6 +26,8 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
 
     this->numTriangles = triCount;
 
+    this->transformMatrix = float4x4(1.0f);
+
     /*
     INFO LAYOUT:
         |vX| |vY| |vZ|  |nX| |nY| |nZ|  | tX || tY |
@@ -84,6 +86,8 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
 
     this->numTriangles = triCount;
 
+    this->transformMatrix = float4x4(1.0f);
+
     /*
     INFO LAYOUT:
         |vX| |vY| |vZ|  |nX| |nY| |nZ|  | tX || tY |
@@ -131,6 +135,7 @@ Ebb::Core::Mesh::Mesh(unsigned int vertexCount, float3 vertexTable[],
 }
 
 void Ebb::Core::Mesh::draw() {
+    this->shader->set_float4x4("objectMatrix", this->transformMatrix);
     this->shader->use();
 
     glBindVertexArray(VAO);
@@ -210,4 +215,12 @@ Ebb::Core::Mesh *Ebb::Core::Mesh::load_ebb_mesh(const char *filename, ShaderProg
     printf("Loaded %lu triangles\n", indices.size() / 3);
 
     return new Mesh(vertices.size(), &vertices[0], (indices.size() / 3), &indices[0], &texcoords[0], &normals[0], shader);
+}
+
+void Ebb::Core::Mesh::set_transform(float4x4 transform) {
+    this->transformMatrix = transform;
+}
+
+float4x4 Ebb::Core::Mesh::get_transform() {
+    return this->transformMatrix;
 }

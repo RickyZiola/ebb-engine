@@ -1,6 +1,69 @@
 #include <ebb/core/shaders/shader.hpp>
+#include <ebb/core/geometry/scene.hpp>
+#include <ebb/core/shaders/light.hpp>
+#include <vector>
 #include <stdio.h>
 #include <GL/glu.h>
+
+static const char * const blinnPhongVertexSource = R"(
+
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNorm;
+layout (location = 2) in vec2 texCoord;
+
+uniform mat4x4 projectionMatrix;
+uniform mat4x4 viewMatrix;
+uniform mat4x4 modelMatrix;
+
+out vec3 normal;
+out vec3 position;
+out vec2 uv;
+
+void main() {
+    normal = mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * aNorm;
+    uv = texCoord;
+    gl_Position = modelMatrix * (viewMatrix * projectionMatrix) * vec4(aPos, 0.0f);
+    position = modelMatrix * aPos;
+}
+
+)";
+
+static const char * const blinnPhongFragmentSource = R"(
+
+#define MAX_LIGHTS 128;
+
+#version 330 core
+in vec3 normal;
+in vec2 position;
+in vec2 uv;
+
+uniform vec3 diffuseColor;
+uniform vec3 specularColor;
+uniform float shininess;
+uniform float specular;
+
+uniform int numLights;
+uniform vec3 lightPositions[MAX_LIGHTS];
+uniform vec3 lightColors[MAX_LIGHTS]
+
+void main() {
+    vec3 finalDiffuse = vec3(0.0, 0.0, 0.0);
+    vec3 finalSpecular = vec3(0.0, 0.0, 0.0);
+
+    for (int lightIdx = 0; lightIdx < numLights; ++lightIdx) {
+        vec3 dirToLight = normalize(lightPositions[lightIdx] - position)
+        finalDiffuse += (lightColors[lightIdx] * diffuseColor) * max(0.1, dot(normal, dirToLight));
+
+        vec3 halfway = normalize(normal + dirToLight);
+        finalSpecular += (lightColors[lightIdx] * diffuseColor) * max(0.0, pow(1.0 - dot(halfway, normal), shininess));
+    }
+
+    FragColor = mix(finalDiffuse, finalSpecular, specular);
+}
+
+)";
+
 
 /**
  * TODO: Preproccessing, custom shading language (?)
@@ -121,4 +184,43 @@ void Ebb::Core::ShaderProgram::set_float4x4(const char *name, float4x4 value) {
 
 void Ebb::Core::ShaderProgram::use() {
     glUseProgram(this->sProgram);
+}
+
+Ebb::Core::Shaders::BlinnPhong::BlinnPhong(
+        float3 diffuseColor, float3 specularColor,
+        float shininess, float specular,
+        Ebb::Core::Scene *scene) {
+
+    this->diffuseColor = diffuseColor;
+    this->specularColor = specularColor;
+    this->shininess = shininess;
+    this->specular = specular;
+    this->scene = scene;
+
+    this->program = new Ebb::Core::ShaderProgram();
+    this->program->load_vertex_source(blinnPhongVertexSource);
+    this->program->load_fragment_source(blinnPhongFragmentSource);
+    this->program->link();
+}
+
+void Ebb::Core::Shaders::BlinnPhong::use() {
+    this->program->use();
+
+    this->program->set_float3("diffuseColor", diffuseColor);
+    this->program->set_float3("specularColor", specularColor);
+
+    this->program->set_float("shininess", shininess);
+    this->program->set_float("specular", specular);
+
+    int num_lights = this->scene->num_lights();
+    std::vector<Ebb::Core::LightSource *> lights = this->scene->get_lights();
+    float3 light_positions[num_lights];
+    float3 light_colors[num_lights];
+
+    for (int i = 0; i < num_lights; ++i) {
+        light_positions[i] = lights[i]->position;
+        light_colors[i]    = lights[i]->color * lights[i]->intensity;
+    }
+
+
 }

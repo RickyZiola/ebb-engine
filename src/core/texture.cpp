@@ -12,12 +12,12 @@ layout (location = 2) in vec2 texCoord;
 
 uniform mat4x4 projectionMatrix;
 uniform mat4x4 viewMatrix;
+uniform mat4x4 objectMatrix;
 
-    // TODO: perspective projection
 out vec3 normal;
 out vec2 uv;
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * vec4(aPos, 1.0);
+    gl_Position = projectionMatrix * (viewMatrix * objectMatrix) * vec4(aPos, 1.0);
     normal = aNorm;
     uv = texCoord;
 }
@@ -29,6 +29,7 @@ out vec4 FragColor;
 
 uniform sampler2D textureSampler;
 in vec2 uv;
+in vec3 normal;
 
 void main() {
     FragColor = vec4(texture(textureSampler, uv).rgb, 1.0);

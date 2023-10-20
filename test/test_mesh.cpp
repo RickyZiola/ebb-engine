@@ -17,8 +17,8 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNorm;
 layout (location = 2) in vec2 texCoord;
 
-uniform float aspect;
 uniform float time;
+uniform float aspect;
 
 out vec2 uv;
 smooth out vec3 normal;
@@ -27,6 +27,7 @@ void main() {
     uv = texCoord;
     normal = normalize(vec3((aNorm.x * cos(time) - aNorm.z * sin(time)), aNorm.y, (aNorm.x * sin(time) + aNorm.z * cos(time))));
     gl_Position = vec4((aPos.x * cos(time) - aPos.z * sin(time)), aPos.y, (aPos.x * sin(time) + aPos.z * cos(time)), 2.0) * .5;
+    gl_Position.x /= aspect;
     pos = gl_Position.xyz;
 }
 )";
@@ -91,7 +92,7 @@ int main(int argc, char *argv[]) {
     shader->load_fragment_source(fragmentShaderSource);
     shader->link();
 
-    shader->set_float("aspect", (float)win.get_width() / (float)win.get_height());
+    shader->set_float("aspect", (float)window->get_width() / (float)window->get_height());
 
     mesh = Ebb::Core::Mesh::load_ebb_mesh("models/suzanne.ebbm", shader);
 

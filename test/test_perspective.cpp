@@ -37,14 +37,18 @@ void frame_callback() {
     shader->set_float3("color", color);
     shader->set_float("time", time / 5);
 
-    float4x4 cameraMatrix = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 1000.0f);
+    float4x4 cameraMatrix = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
     shader->set_float4x4("projectionMatrix", cameraMatrix);
 
-    float4x4 viewMatrix = glm::lookAt(float3(2.0f * cos(time / 2.0f), 2.0f, 2.0f * sin(time / 2.0f)), float3(0.0f, 0.0f, 0.0f), float3(0.0f, 1.0f, 0.0f));
+    float4x4 viewMatrix = glm::lookAt(float3(3.0f * cos(time / 4.0f), 3.0f * sin(time / glm::pi<float>()), 3.0f * sin(time / 4.0f)), float3(0.0f, 0.0f, 0.0f), float3(0.0f, 1.0f, 0.0f));
     shader->set_float4x4("viewMatrix", viewMatrix);
+
+    //mesh->set_transform(glm::scale(float4x4(1.0), float3(sin(time * 5.0))));
 
     glClearColor(.5f, .8f, .9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     mesh->draw();
 
